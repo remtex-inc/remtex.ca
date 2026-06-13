@@ -532,6 +532,36 @@
   function startSlider(){ clearInterval(rmtxTimer); rmtxTimer=setInterval(function(){ rmtxCur=(rmtxCur+1)%rmtxSlides.length; rmtxRender(); }, 5000); }
   function pauseSlider(){ clearInterval(rmtxTimer); }
   rmtxRender(); startSlider();
+
+  // GA4 conversion tracking
+  (function(){
+    function track(name, params){
+      if(typeof gtag === 'function') gtag('event', name, params || {});
+    }
+    // Did the visitor reach the "Get in touch" section?
+    var contact = document.getElementById('contact');
+    if(contact && 'IntersectionObserver' in window){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting){ track('view_contact_section'); io.disconnect(); }
+        });
+      }, { threshold: 0.4 });
+      io.observe(contact);
+    }
+    // Conversion actions: call, email, get-a-quote
+    document.addEventListener('click', function(ev){
+      var a = ev.target.closest && ev.target.closest('a');
+      if(!a) return;
+      var href = a.getAttribute('href') || '';
+      if(href.indexOf('tel:') === 0){
+        track('contact_call', { method: 'phone', link_url: href });
+      } else if(href.indexOf('mailto:') === 0){
+        track('contact_email', { method: 'email', link_url: href });
+      } else if(a.classList.contains('rmtx-quote-btn') || a.classList.contains('rmtx-mobile-quote')){
+        track('quote_click', { method: 'get_a_quote' });
+      }
+    }, true);
+  })();
 </script>
 </body>
 </html>
