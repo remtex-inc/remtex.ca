@@ -19,6 +19,51 @@
   @keyframes rmtxSlowZoom { from { transform: scale(1.06); } to { transform: scale(1); } }
   #remtex [data-reveal] { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.16,.84,.44,1), transform .7s cubic-bezier(.16,.84,.44,1); }
   #remtex [data-reveal].rmtx-in { opacity: 1; transform: none; }
+
+  /* --- Responsive: mobile & tablet --- */
+  #remtex .rmtx-burger { display: none; }
+  #remtex .rmtx-mobile-menu { display: none; }
+
+  /* Tablet & below: collapse the desktop nav into a hamburger menu */
+  @media (max-width: 880px) {
+    #remtex .rmtx-nav,
+    #remtex .rmtx-quote-btn { display: none !important; }
+    #remtex .rmtx-burger { display: inline-flex !important; }
+    #remtex.rmtx-menu-open .rmtx-mobile-menu { display: block; }
+  }
+
+  /* Mobile-menu panel styling */
+  #remtex .rmtx-mobile-menu {
+    border-top: 1px solid #e9ebf1;
+    background: rgba(255,255,255,.98);
+    backdrop-filter: blur(12px);
+  }
+  #remtex .rmtx-mobile-menu a {
+    display: block;
+    padding: 15px 28px;
+    color: #15223d;
+    text-decoration: none;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border-bottom: 1px solid #f0f1f5;
+  }
+  #remtex .rmtx-mobile-menu a:last-child { border-bottom: none; }
+  #remtex .rmtx-mobile-menu a.rmtx-mobile-quote {
+    color: #fff;
+    background: #15223d;
+    margin: 12px 18px 18px;
+    border-radius: 999px;
+    text-align: center;
+    border-bottom: none;
+  }
+
+  /* Phone: tighten horizontal padding & shrink the utility bar */
+  @media (max-width: 560px) {
+    #remtex .rmtx-utility-tagline { display: none !important; }
+    #remtex .rmtx-utility-hours { display: none !important; }
+    #remtex .rmtx-bar-inner { padding-left: 18px; padding-right: 18px; }
+    #remtex .rmtx-header-inner { padding-left: 18px; padding-right: 18px; }
+  }
 </style>
 <noscript><style>#remtex [data-reveal] { opacity: 1 !important; transform: none !important; }</style></noscript>
 </head>
@@ -27,13 +72,13 @@
 
   <!-- Utility bar -->
   <div style="background:#11203b;color:#cfd6e4;font-size:.82rem;">
-    <div style="max-width:1200px;margin:0 auto;padding:9px 28px;display:flex;align-items:center;justify-content:space-between;gap:18px;">
-      <p style="margin:0;letter-spacing:.02em;color:#9aa6bd;display:flex;align-items:center;gap:8px;">
+    <div class="rmtx-bar-inner" style="max-width:1200px;margin:0 auto;padding:9px 28px;display:flex;align-items:center;justify-content:space-between;gap:18px;">
+      <p class="rmtx-utility-tagline" style="margin:0;letter-spacing:.02em;color:#9aa6bd;display:flex;align-items:center;gap:8px;">
         <span style="width:6px;height:6px;border-radius:50%;background:#bf6048;display:inline-block;"></span>
         <span data-lang-en>Montreal · Bulk Textiles &amp; Finished Garments</span><span data-lang-fr>Montréal · Textiles en gros et vêtements finis</span>
       </p>
       <div style="display:flex;align-items:center;gap:22px;">
-        <span style="color:#9aa6bd;"><span data-lang-en>Mon–Fri · 8:30–5:00</span><span data-lang-fr>Lun–Ven · 8h30–17h00</span></span>
+        <span class="rmtx-utility-hours" style="color:#9aa6bd;"><span data-lang-en>Mon–Fri · 8:30–5:00</span><span data-lang-fr>Lun–Ven · 8h30–17h00</span></span>
         <a href="tel:+15143826027" style="color:#fff;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:7px;letter-spacing:.01em;">
           <svg viewBox="0 0 24 24" fill="currentColor" style="width:13px;height:13px;color:#d4795f;"><path d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z"/></svg>
           514-382-6027
@@ -44,11 +89,11 @@
 
   <!-- Header -->
   <header style="position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:blur(12px);border-bottom:1px solid #e9ebf1;">
-    <div style="max-width:1200px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;">
+    <div class="rmtx-header-inner" style="max-width:1200px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;">
       <a href="#top" style="display:flex;align-items:center;text-decoration:none;">
         <img src="images/logo.jpeg" alt="Remtex" style="height:42px;width:auto;display:block;" />
       </a>
-      <nav style="display:flex;align-items:center;gap:38px;font-size:.95rem;font-weight:500;">
+      <nav class="rmtx-nav" style="display:flex;align-items:center;gap:38px;font-size:.95rem;font-weight:500;">
         <a href="#why" style="color:#46506a;text-decoration:none;" onmouseover="this.style.color='#15223d'" onmouseout="this.style.color='#46506a'"><span data-lang-en>Why Remtex</span><span data-lang-fr>Pourquoi Remtex</span></a>
         <a href="#materials" style="color:#46506a;text-decoration:none;" onmouseover="this.style.color='#15223d'" onmouseout="this.style.color='#46506a'"><span data-lang-en>Materials</span><span data-lang-fr>Matériaux</span></a>
         <a href="#gallery" style="color:#46506a;text-decoration:none;" onmouseover="this.style.color='#15223d'" onmouseout="this.style.color='#46506a'"><span data-lang-en>Gallery</span><span data-lang-fr>Galerie</span></a>
@@ -58,11 +103,24 @@
         <button onclick="toggleLang()" style="font-size:.78rem;font-weight:700;letter-spacing:.06em;color:#46506a;background:transparent;border:1px solid #d7dbe5;border-radius:999px;padding:7px 13px;cursor:pointer;">
           <span data-lang-en>FR</span><span data-lang-fr>EN</span>
         </button>
-        <a href="#contact" style="font-size:.92rem;font-weight:600;color:#fff;background:#15223d;border-radius:999px;padding:10px 20px;text-decoration:none;" onmouseover="this.style.background='#22335a'" onmouseout="this.style.background='#15223d'">
+        <a href="#contact" class="rmtx-quote-btn" style="font-size:.92rem;font-weight:600;color:#fff;background:#15223d;border-radius:999px;padding:10px 20px;text-decoration:none;" onmouseover="this.style.background='#22335a'" onmouseout="this.style.background='#15223d'">
           <span data-lang-en>Get a Quote</span><span data-lang-fr>Obtenir un devis</span>
         </a>
+        <button class="rmtx-burger" onclick="toggleMenu()" aria-label="Menu" aria-expanded="false" style="width:42px;height:42px;align-items:center;justify-content:center;background:transparent;border:1px solid #d7dbe5;border-radius:11px;color:#15223d;cursor:pointer;padding:0;">
+          <svg class="rmtx-burger-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:21px;height:21px;"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          <svg class="rmtx-burger-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:21px;height:21px;display:none;"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
       </div>
     </div>
+
+    <!-- Mobile menu (collapses from hamburger) -->
+    <nav class="rmtx-mobile-menu" aria-label="Mobile">
+      <a href="#why" onclick="closeMenu()"><span data-lang-en>Why Remtex</span><span data-lang-fr>Pourquoi Remtex</span></a>
+      <a href="#materials" onclick="closeMenu()"><span data-lang-en>Materials</span><span data-lang-fr>Matériaux</span></a>
+      <a href="#gallery" onclick="closeMenu()"><span data-lang-en>Gallery</span><span data-lang-fr>Galerie</span></a>
+      <a href="#contact" onclick="closeMenu()"><span data-lang-en>Contact</span><span data-lang-fr>Contact</span></a>
+      <a href="#contact" class="rmtx-mobile-quote" onclick="closeMenu()"><span data-lang-en>Get a Quote</span><span data-lang-fr>Obtenir un devis</span></a>
+    </nav>
   </header>
 
   <!-- Hero -->
@@ -324,6 +382,21 @@
 <script>
   // Language toggle
   function toggleLang(){ var w=document.getElementById('remtex'); w.dataset.lang = w.dataset.lang==='fr' ? 'en' : 'fr'; }
+
+  // Mobile menu toggle
+  function setMenu(open){
+    var w=document.getElementById('remtex');
+    w.classList.toggle('rmtx-menu-open', open);
+    var burger=w.querySelector('.rmtx-burger');
+    if(burger) burger.setAttribute('aria-expanded', open?'true':'false');
+    var oi=w.querySelector('.rmtx-burger-open'), ci=w.querySelector('.rmtx-burger-close');
+    if(oi) oi.style.display = open?'none':'block';
+    if(ci) ci.style.display = open?'block':'none';
+  }
+  function toggleMenu(){ var w=document.getElementById('remtex'); setMenu(!w.classList.contains('rmtx-menu-open')); }
+  function closeMenu(){ setMenu(false); }
+  // Close the menu if the viewport grows back to desktop width
+  window.addEventListener('resize', function(){ if(window.innerWidth>880) closeMenu(); }, { passive:true });
 
   // Scroll reveal (rect-based — robust across environments)
   (function(){
