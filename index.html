@@ -475,8 +475,11 @@
 </div>
 
 <script>
+  // GA4 event helper
+  function rmtxTrack(name, params){ if(typeof gtag === 'function') gtag('event', name, params || {}); }
+
   // Language toggle
-  function toggleLang(){ var w=document.getElementById('remtex'); w.dataset.lang = w.dataset.lang==='fr' ? 'en' : 'fr'; }
+  function toggleLang(){ var w=document.getElementById('remtex'); w.dataset.lang = w.dataset.lang==='fr' ? 'en' : 'fr'; rmtxTrack('language_switch', { language: w.dataset.lang }); }
 
   // Mobile menu toggle
   function setMenu(open){
@@ -526,39 +529,40 @@
     rmtxSlides.forEach(function(s,i){ s.style.opacity = (i===rmtxCur)?'1':'0'; });
     rmtxDots.forEach(function(d,i){ d.style.background = (i===rmtxCur)?'#ffffff':'rgba(255,255,255,.5)'; });
   }
-  function nextSlide(){ rmtxCur=(rmtxCur+1)%rmtxSlides.length; rmtxRender(); startSlider(); }
-  function prevSlide(){ rmtxCur=(rmtxCur-1+rmtxSlides.length)%rmtxSlides.length; rmtxRender(); startSlider(); }
-  function goToSlide(i){ rmtxCur=i; rmtxRender(); startSlider(); }
+  function nextSlide(){ rmtxCur=(rmtxCur+1)%rmtxSlides.length; rmtxRender(); startSlider(); rmtxTrack('gallery_nav', { direction:'next', slide: rmtxCur+1 }); }
+  function prevSlide(){ rmtxCur=(rmtxCur-1+rmtxSlides.length)%rmtxSlides.length; rmtxRender(); startSlider(); rmtxTrack('gallery_nav', { direction:'prev', slide: rmtxCur+1 }); }
+  function goToSlide(i){ rmtxCur=i; rmtxRender(); startSlider(); rmtxTrack('gallery_nav', { direction:'dot', slide: rmtxCur+1 }); }
   function startSlider(){ clearInterval(rmtxTimer); rmtxTimer=setInterval(function(){ rmtxCur=(rmtxCur+1)%rmtxSlides.length; rmtxRender(); }, 5000); }
   function pauseSlider(){ clearInterval(rmtxTimer); }
   rmtxRender(); startSlider();
 
-  // GA4 conversion tracking
+  // GA4 interaction tracking
   (function(){
-    function track(name, params){
-      if(typeof gtag === 'function') gtag('event', name, params || {});
+    // Section-reach funnel: why -> materials -> gallery -> contact
+    if('IntersectionObserver' in window){
+      ['why','materials','gallery','contact'].forEach(function(id){
+        var el = document.getElementById(id);
+        if(!el) return;
+        var io = new IntersectionObserver(function(entries){
+          entries.forEach(function(e){
+            if(e.isIntersecting){ rmtxTrack('view_' + id + '_section'); io.disconnect(); }
+          });
+        }, { threshold: 0, rootMargin: '0px 0px -25% 0px' });
+        io.observe(el);
+      });
     }
-    // Did the visitor reach the "Get in touch" section?
-    var contact = document.getElementById('contact');
-    if(contact && 'IntersectionObserver' in window){
-      var io = new IntersectionObserver(function(entries){
-        entries.forEach(function(e){
-          if(e.isIntersecting){ track('view_contact_section'); io.disconnect(); }
-        });
-      }, { threshold: 0.4 });
-      io.observe(contact);
-    }
-    // Conversion actions: call, email, get-a-quote
+    // Conversion actions: call (inline vs floating), email, get-a-quote
     document.addEventListener('click', function(ev){
       var a = ev.target.closest && ev.target.closest('a');
       if(!a) return;
       var href = a.getAttribute('href') || '';
       if(href.indexOf('tel:') === 0){
-        track('contact_call', { method: 'phone', link_url: href });
+        var floating = a.getAttribute('aria-label') === 'Call Remtex';
+        rmtxTrack(floating ? 'contact_call_floating' : 'contact_call', { method: 'phone', link_url: href });
       } else if(href.indexOf('mailto:') === 0){
-        track('contact_email', { method: 'email', link_url: href });
+        rmtxTrack('contact_email', { method: 'email', link_url: href });
       } else if(a.classList.contains('rmtx-quote-btn') || a.classList.contains('rmtx-mobile-quote')){
-        track('quote_click', { method: 'get_a_quote' });
+        rmtxTrack('quote_click', { method: 'get_a_quote' });
       }
     }, true);
   })();
